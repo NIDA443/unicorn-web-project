@@ -4,21 +4,20 @@ phases:
   install:
     runtime-versions:
       java: corretto8
-
   pre_build:
     commands:
       - echo Initializing environment
-      - export CODEARTIFACT_AUTH_TOKEN=$(aws codeartifact get-authorization-token --domain unicorns --domain-owner 725741144521 --query authorizationToken --output text)
-
+      - export CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain unicorns --domain-owner 725741144521 --query authorizationToken -->
   build:
     commands:
       - echo Build started on `date`
       - mvn -s settings.xml compile
-
   post_build:
     commands:
       - echo Build completed on `date`
       - mvn -s settings.xml package
+phases:
+  [..]
 
 artifacts:
   files:
