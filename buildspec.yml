@@ -4,22 +4,27 @@ phases:
   install:
     runtime-versions:
       java: corretto8
+    commands:
+      - echo "Installing dependencies"
+      - curl -o settings.xml https://path-to-your-settings-file/settings.xml # Ensure the correct settings.xml is available
   pre_build:
     commands:
       - echo "Initializing environment"
       - export CODEARTIFACT_AUTH_TOKEN=$(aws codeartifact get-authorization-token --domain unicorns --domain-owner 725741144521 --query authorizationToken --output text)
+      - echo "Authentication token retrieved"
   build:
     commands:
       - echo "Build started on $(date)"
-      - mvn -s settings.xml compile
+      - mvn -s settings.xml clean compile # Clean the previous build before compiling
   post_build:
     commands:
       - echo "Build completed on $(date)"
-      - mvn -s settings.xml package
+      - mvn -s settings.xml package # Ensure the package is generated
 
 artifacts:
   files:
     - target/unicorn-web-project.war
     - appspec.yml
-    - scripts/**/*
+    - scripts/**/* # Ensure your scripts folder is correctly placed
   discard-paths: no
+
