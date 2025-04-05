@@ -6,18 +6,16 @@ phases:
       java: corretto8
   pre_build:
     commands:
-      - echo Initializing environment
-      - export CODEARTIFACT_AUTH_TOKEN=`aws codeartifact get-authorization-token --domain unicorns --domain-owner 725741144521 --query authorizationToken -->
+      - echo "Initializing environment"
+      - export CODEARTIFACT_AUTH_TOKEN=$(aws codeartifact get-authorization-token --domain unicorns --domain-owner 725741144521 --query authorizationToken --output text)
   build:
     commands:
-      - echo Build started on `date`
+      - echo "Build started on $(date)"
       - mvn -s settings.xml compile
   post_build:
     commands:
-      - echo Build completed on `date`
+      - echo "Build completed on $(date)"
       - mvn -s settings.xml package
-phases:
-  [..]
 
 artifacts:
   files:
@@ -25,4 +23,3 @@ artifacts:
     - appspec.yml
     - scripts/**/*
   discard-paths: no
-
